@@ -1,4 +1,4 @@
-# Write your code here
+ # Write your code here
 # pseudo menu part.
 import random
 
@@ -35,7 +35,28 @@ def n_len_rand(len_, floor=1):
     if floor > top:
         raise ValueError(f"Floor {floor} must be less than requested top {top}")
     return f'{random.randrange(floor, top):0{len_}}'
+# Luhn algorithms used to validate the generated account number.
+def luhn_method(num):  # here num is in str format.
+    # multiplying odd digits by 2.
+    multiplied = ''
+    for i in range(len(num)):
+        if i % 2 == 0:  # selecting odd places starting from index = 0
+            x = 2 * int(num[i])
+            if x > 9:
+                x = x - 9
+                multiplied = multiplied + str(x)
+            else:
+                multiplied = multiplied + str(x)
+        else:
+            multiplied = multiplied + num[i]
 
+    sum = 0
+    for digit in multiplied:
+        sum += int(digit)
+    control_no = 0
+    if (sum % 10 != 0):
+        control_no = (10 - sum % 10)
+    return (str(control_no))
 
 menu1 = '''1. Create an account
 2. Log into account
@@ -48,12 +69,11 @@ while (flag == True):
     print(menu1)
     in1 = int(input())
     if in1 == 1:
-
-        #creating a random acc. no and PIN :
-        a = random.randint(0000000000, 9999999999)
-        rand_no = str(4000000000000000 + a)
+        # creating a random acc. no and PIN :
+        acc_identifier = random.randint(000000000,999999999)  # Account identifier is a random 9-digit number unique for every user.
+        num = str(400000000000000 + acc_identifier)  # 400000 is the fixed BIN (Bank identification number) for our bank.
         rand_pin = n_len_rand(4)
-
+        rand_no = num + luhn_method(num)
 
         new = Card(rand_no,rand_pin)  # calling card class constructor for card creation with attributes as randon to be generated kater in code.
         print("Your card has been created")
